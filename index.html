@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)file:///C:/Users/hp305/Downloads/kamcookz_3.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kamcookz — Study. Cook. Train. ∞</title>
+<link href="./kamcookz — Study. Cook. Train. ∞_files/css2" rel="stylesheet">
+<style>
+  :root{--cream:#F5F0E8;--black:#1A1A1A;--red:#C0392B;--green:#1B6B3A;--warm-gray:#8C8070;--light-gray:#E8E2D9;--white:#FDFAF5;--yellow:#E8C547;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--black);font-family:'DM Sans',sans-serif;min-height:100vh;}
+
+  /* ── LOADING SPLASH ── */
+  .loading-splash{position:fixed;inset:0;background:var(--black);z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;transition:opacity 0.4s;}
+  .loading-splash.hidden{opacity:0;pointer-events:none;}
+  .loading-logo{font-size:3rem;animation:pulse 1.2s ease-in-out infinite;}
+  .loading-text{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:3px;color:var(--warm-gray);text-transform:uppercase;}
+  .loading-bar{width:160px;height:2px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;}
+  .loading-bar-inner{height:100%;width:0%;background:var(--red);animation:loadbar 1.5s ease forwards;}
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.1);}}
+  @keyframes loadbar{0%{width:0%;}100%{width:100%;}}
+
+  /* ── LOGIN SCREEN ── */
+  .login-screen{position:fixed;inset:0;background:var(--black);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;}
+  .login-screen.hidden{display:none;}
+  .login-box{width:100%;max-width:420px;text-align:center;}
+  .login-logo{font-size:3.5rem;margin-bottom:1rem;}
+  .login-brand{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--white);margin-bottom:0.3rem;}
+  .login-tagline{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:3rem;}
+  .login-tabs{display:flex;margin-bottom:2rem;border:1.5px solid rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;}
+  .login-tab{flex:1;padding:10px;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;color:var(--warm-gray);cursor:pointer;transition:all 0.2s;}
+  .login-tab.active{background:var(--red);color:var(--white);}
+  .login-tab:not(.active):hover{color:var(--white);}
+  .login-form{display:flex;flex-direction:column;gap:1rem;}
+  .login-input{width:100%;padding:14px 16px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;border-radius:3px;transition:border-color 0.2s;text-align:center;letter-spacing:2px;}
+  .login-input::placeholder{letter-spacing:1px;color:rgba(255,255,255,0.25);}
+  .login-input:focus{border-color:var(--red);}
+  .login-btn{padding:14px;background:var(--red);color:var(--white);border:none;font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;cursor:pointer;border-radius:3px;transition:background 0.2s,transform 0.1s;}
+  .login-btn:hover{background:#A93226;transform:translateY(-1px);}
+  .login-guest-desc{color:var(--warm-gray);font-size:0.9rem;line-height:1.7;}
+  .login-error{font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--red);letter-spacing:1px;min-height:1rem;}
+
+  /* ── HEADER ── */
+  header{background:var(--black);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:72px;position:sticky;top:0;z-index:100;border-bottom:3px solid var(--red);}
+  .logo-wrap{display:flex;align-items:center;gap:14px;}
+  .logo-circle{width:48px;height:48px;border-radius:50%;background:var(--cream);border:2px solid var(--red);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+  .logo-text{display:flex;flex-direction:column;line-height:1;}
+  .brand{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--white);letter-spacing:-0.5px;}
+  .tagline{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--red);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+  .header-right{display:flex;align-items:center;gap:12px;}
+  .admin-badge{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;background:var(--red);color:var(--white);}
+  .guest-badge{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;background:rgba(255,255,255,0.08);color:var(--warm-gray);}
+  .btn-add{background:var(--red);color:var(--white);border:none;padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer;letter-spacing:0.5px;transition:background 0.2s,transform 0.1s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
+  .btn-add:hover{background:#A93226;transform:translateY(-1px);}
+  .btn-logout{background:none;border:1.5px solid rgba(255,255,255,0.15);color:var(--warm-gray);padding:8px 14px;font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;transition:all 0.15s;}
+  .btn-logout:hover{border-color:var(--white);color:var(--white);}
+
+  /* ── HERO ── */
+  .hero{background:var(--black);padding:5rem 2rem 4rem;position:relative;overflow:hidden;text-align:center;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(192,57,43,0.15) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(27,107,58,0.12) 0%,transparent 60%);}
+  .hero-eyebrow{font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:1rem;position:relative;}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,8vw,6rem);font-weight:900;color:var(--white);line-height:1;position:relative;}
+  .hero h1 em{font-style:italic;color:var(--red);}
+  .hero-sub{font-size:1rem;color:var(--warm-gray);margin-top:1.5rem;max-width:480px;margin-left:auto;margin-right:auto;position:relative;line-height:1.7;}
+  .hero-stats{display:flex;justify-content:center;gap:3rem;margin-top:3rem;position:relative;}
+  .stat{text-align:center;}
+  .stat .num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--white);display:block;line-height:1;}
+  .stat .label{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--warm-gray);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+  .stat-divider{width:1px;background:rgba(255,255,255,0.1);align-self:stretch;}
+
+  /* ── FILTERS ── */
+  .filters-bar{background:var(--white);border-bottom:1px solid var(--light-gray);padding:1rem 2rem;display:flex;align-items:center;gap:1rem;overflow-x:auto;scrollbar-width:none;position:sticky;top:72px;z-index:90;}
+  .filters-bar::-webkit-scrollbar{display:none;}
+  .filter-label{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:2px;color:var(--warm-gray);text-transform:uppercase;white-space:nowrap;}
+  .filter-btn{background:none;border:1.5px solid var(--light-gray);color:var(--black);padding:6px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;cursor:pointer;white-space:nowrap;transition:all 0.15s;border-radius:2px;}
+  .filter-btn:hover,.filter-btn.active{background:var(--black);border-color:var(--black);color:var(--white);}
+  .search-wrap{margin-left:auto;position:relative;flex-shrink:0;}
+  .search-wrap input{background:var(--light-gray);border:none;padding:8px 14px 8px 36px;font-family:'DM Sans',sans-serif;font-size:0.85rem;color:var(--black);outline:none;width:200px;border-radius:2px;transition:width 0.3s;}
+  .search-wrap input:focus{width:260px;}
+  .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--warm-gray);font-size:0.9rem;}
+
+  /* ── GRID ── */
+  .main{max-width:1280px;margin:0 auto;padding:3rem 2rem;}
+  .section-header{display:flex;align-items:baseline;gap:1rem;margin-bottom:2rem;}
+  .section-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;}
+  .section-count{font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--warm-gray);letter-spacing:1px;}
+  .recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;}
+  .recipe-card{background:var(--white);border:1px solid var(--light-gray);position:relative;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;overflow:hidden;}
+  .recipe-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1);}
+  .card-img{width:100%;height:200px;object-fit:cover;display:block;}
+  .card-img-placeholder{width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:linear-gradient(135deg,var(--light-gray),var(--cream));}
+  .card-tag{position:absolute;top:12px;left:12px;background:var(--black);color:var(--white);font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;}
+  .card-body{padding:1.25rem;}
+  .card-meta{display:flex;align-items:center;gap:1rem;margin-bottom:0.6rem;}
+  .card-time,.card-diff{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--warm-gray);letter-spacing:1px;text-transform:uppercase;}
+  .card-diff.easy{color:var(--green);}.card-diff.medium{color:var(--yellow);}.card-diff.hard{color:var(--red);}
+  .card-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;line-height:1.3;margin-bottom:0.5rem;}
+  .card-desc{font-size:0.83rem;color:var(--warm-gray);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .card-actions{display:flex;gap:8px;padding:0.75rem 1.25rem;border-top:1px solid var(--light-gray);background:var(--cream);}
+  .card-btn{flex:1;padding:7px;border:1.5px solid var(--light-gray);background:none;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.15s;border-radius:2px;}
+  .card-btn.edit:hover{background:var(--black);color:var(--white);border-color:var(--black);}
+  .card-btn.delete:hover{background:var(--red);color:var(--white);border-color:var(--red);}
+  .empty-state{grid-column:1/-1;text-align:center;padding:5rem 2rem;color:var(--warm-gray);}
+  .empty-state .empty-icon{font-size:4rem;margin-bottom:1rem;}
+  .empty-state h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--black);margin-bottom:0.5rem;}
+  .empty-state p{font-size:0.9rem;}
+
+  /* ── MODALS ── */
+  .modal-overlay{position:fixed;inset:0;background:rgba(26,26,26,0.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal{background:var(--white);width:100%;max-width:640px;max-height:90vh;overflow-y:auto;border-top:4px solid var(--red);transform:translateY(20px);transition:transform 0.25s;}
+  .modal-overlay.open .modal{transform:translateY(0);}
+  .modal-header{padding:1.5rem 1.75rem 1rem;border-bottom:1px solid var(--light-gray);display:flex;align-items:center;justify-content:space-between;}
+  .modal-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;}
+  .modal-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--warm-gray);line-height:1;padding:4px;}
+  .modal-close:hover{color:var(--black);}
+  .modal-body{padding:1.75rem;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .form-group{margin-bottom:1.25rem;}
+  .form-group label{display:block;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--warm-gray);margin-bottom:0.4rem;}
+  .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1.5px solid var(--light-gray);background:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--black);outline:none;border-radius:2px;transition:border-color 0.15s;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--red);background:var(--white);}
+  .form-group textarea{resize:vertical;min-height:80px;}
+  .ingredients-list{display:flex;flex-direction:column;gap:8px;}
+  .ingredient-row{display:flex;gap:8px;align-items:center;}
+  .ingredient-row input{flex:1;}
+  .ingredient-row button{background:none;border:1.5px solid var(--light-gray);color:var(--warm-gray);width:34px;height:34px;cursor:pointer;font-size:1rem;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+  .ingredient-row button:hover{background:var(--red);border-color:var(--red);color:var(--white);}
+  .btn-add-ingredient{background:none;border:1.5px dashed var(--light-gray);color:var(--warm-gray);padding:8px;width:100%;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.82rem;margin-top:6px;border-radius:2px;transition:all 0.15s;}
+  .btn-add-ingredient:hover{border-color:var(--green);color:var(--green);}
+  .modal-footer{padding:1rem 1.75rem 1.75rem;display:flex;gap:10px;}
+  .btn-save{flex:1;background:var(--black);color:var(--white);border:none;padding:12px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;cursor:pointer;border-radius:2px;transition:background 0.15s;}
+  .btn-save:hover{background:var(--red);}
+  .btn-cancel{background:none;border:1.5px solid var(--light-gray);color:var(--black);padding:12px 24px;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;border-radius:2px;transition:all 0.15s;}
+  .btn-cancel:hover{border-color:var(--black);}
+  .btn-save:disabled{opacity:0.5;cursor:not-allowed;}
+
+  /* ── VIEW MODAL ── */
+  .view-modal-img{width:100%;height:260px;object-fit:cover;}
+  .view-modal-img-placeholder{width:100%;height:180px;background:linear-gradient(135deg,var(--light-gray),var(--cream));display:flex;align-items:center;justify-content:center;font-size:4rem;}
+  .view-modal-body{padding:1.75rem;}
+  .view-modal-meta{display:flex;gap:1.5rem;margin-bottom:1.25rem;flex-wrap:wrap;}
+  .view-meta-item{display:flex;flex-direction:column;gap:2px;}
+  .view-meta-label{font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--warm-gray);}
+  .view-meta-val{font-size:0.9rem;font-weight:500;}
+  .view-section-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin:1.25rem 0 0.6rem;border-bottom:1px solid var(--light-gray);padding-bottom:0.4rem;}
+  .ingredients-view{list-style:none;}
+  .ingredients-view li{padding:6px 0;font-size:0.9rem;border-bottom:1px dotted var(--light-gray);display:flex;align-items:center;gap:8px;}
+  .ingredients-view li::before{content:'';width:6px;height:6px;background:var(--red);border-radius:50%;flex-shrink:0;}
+  .steps-view{list-style:none;counter-reset:steps;}
+  .steps-view li{counter-increment:steps;padding:10px 0 10px 2.5rem;font-size:0.9rem;border-bottom:1px dotted var(--light-gray);line-height:1.6;position:relative;}
+  .steps-view li::before{content:counter(steps);position:absolute;left:0;top:10px;background:var(--black);color:var(--white);width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:0.65rem;border-radius:2px;}
+
+  /* ── TOAST ── */
+  .toast{position:fixed;bottom:2rem;right:2rem;background:var(--black);color:var(--white);padding:12px 20px;font-family:'DM Sans',sans-serif;font-size:0.85rem;border-left:4px solid var(--green);z-index:400;transform:translateX(200%);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);border-radius:2px;max-width:280px;}
+  .toast.show{transform:translateX(0);}.toast.error{border-color:var(--red);}
+
+  /* ── CONFIRM ── */
+  .confirm-overlay{position:fixed;inset:0;background:rgba(26,26,26,0.7);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+  .confirm-overlay.open{opacity:1;pointer-events:all;}
+  .confirm-box{background:var(--white);padding:2rem;max-width:340px;width:90%;border-top:4px solid var(--red);text-align:center;}
+  .confirm-box h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:0.5rem;}
+  .confirm-box p{font-size:0.85rem;color:var(--warm-gray);margin-bottom:1.5rem;}
+  .confirm-btns{display:flex;gap:10px;}
+  .confirm-btns button{flex:1;padding:10px;border:none;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer;border-radius:2px;transition:opacity 0.15s;}
+  .confirm-btns button:hover{opacity:0.85;}
+  .confirm-yes{background:var(--red);color:var(--white);}.confirm-no{background:var(--light-gray);color:var(--black);}
+
+  /* ── FOOTER ── */
+  footer{background:var(--black);color:var(--warm-gray);text-align:center;padding:2rem;font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;border-top:3px solid var(--green);}
+  footer span{color:var(--red);}
+
+  @media(max-width:600px){
+    .hero h1{font-size:2.5rem;}.hero-stats{gap:1.5rem;}.stat .num{font-size:1.8rem;}
+    .form-row{grid-template-columns:1fr;}.search-wrap input{width:140px;}.search-wrap input:focus{width:180px;}
+    .header-right{gap:8px;}.btn-logout{padding:6px 10px;font-size:0.55rem;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ LOADING SPLASH ══ -->
+<div class="loading-splash hidden" id="loading-splash">
+  <div class="loading-logo">👨‍🍳</div>
+  <div class="loading-text">Loading kamcookz…</div>
+  <div class="loading-bar"><div class="loading-bar-inner"></div></div>
+</div>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div class="login-screen hidden" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">👨‍🍳</div>
+    <div class="login-brand">kamcookz</div>
+    <div class="login-tagline">Study · Cook · Train ∞</div>
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchTab(&#39;admin&#39;, this)">Admin</button>
+      <button class="login-tab" onclick="switchTab(&#39;guest&#39;, this)">Guest</button>
+    </div>
+    <div id="tab-admin" class="login-form">
+      <input class="login-input" type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key===&#39;Enter&#39;)adminLogin()">
+      <div class="login-error" id="pw-error"></div>
+      <button class="login-btn" onclick="adminLogin()">Enter Kitchen →</button>
+    </div>
+    <div id="tab-guest" class="login-form" style="display:none;">
+      <p class="login-guest-desc">Browse all recipes — no account needed.</p>
+      <button class="login-btn" onclick="enterApp(&#39;guest&#39;)">Browse as Guest →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN APP ══ -->
+<div id="app" style="display: block;">
+
+<header>
+  <div class="logo-wrap">
+    <div class="logo-circle">👨‍🍳</div>
+    <div class="logo-text">
+      <span class="brand">kamcookz</span>
+      <span class="tagline">Study · Cook · Train ∞</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <span id="role-badge" class="admin-badge">Admin</span>
+    <button class="btn-add" id="btn-new-recipe" onclick="openAddModal()" style="display: block;">+ New Recipe</button>
+    <button class="btn-logout" onclick="logout()">↩ Exit</button>
+  </div>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">The Kitchen Journal</p>
+  <h1>Recipes by<br><em>kamcookz</em></h1>
+  <p class="hero-sub">A personal collection of meals crafted with purpose — for the mind, the body, and the spirit.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="num" id="stat-total">2</span><span class="label">Recipes</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><span class="num" id="stat-categories">1</span><span class="label">Categories</span></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><span class="num" id="stat-latest">Hibachi</span><span class="label">Latest</span></div>
+  </div>
+</section>
+
+<div class="filters-bar">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" onclick="filterRecipes(&#39;all&#39;,this)">All</button>
+  <button class="filter-btn" onclick="filterRecipes(&#39;Breakfast&#39;,this)">Breakfast</button>
+  <button class="filter-btn" onclick="filterRecipes(&#39;Lunch&#39;,this)">Lunch</button>
+  <button class="filter-btn" onclick="filterRecipes(&#39;Dinner&#39;,this)">Dinner</button>
+  <button class="filter-btn" onclick="filterRecipes(&#39;Snack&#39;,this)">Snack</button>
+  <button class="filter-btn" onclick="filterRecipes(&#39;Dessert&#39;,this)">Dessert</button>
+  <button class="filter-btn" onclick="filterRecipes(&#39;Drink&#39;,this)">Drink</button>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" placeholder="Search recipes…" oninput="searchRecipes(this.value)">
+  </div>
+</div>
+
+<main class="main">
+  <div class="section-header">
+    <h2 class="section-title">My Recipes</h2>
+    <span class="section-count" id="shown-count">2 recipes</span>
+  </div>
+  <div class="recipe-grid" id="recipe-grid">
+    <div class="recipe-card" onclick="viewRecipe(&#39;seed_1&#39;)">
+      <div class="card-img-placeholder">🍛</div>
+      <div class="card-tag">Lunch</div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-time">⏱ 60–90 min</span>
+          <span class="card-diff medium">medium</span>
+        </div>
+        <div class="card-title">Butter Chicken</div>
+        <div class="card-desc">Tender marinated chicken in a rich, creamy tomato-cashew sauce. Worth every minute.</div>
+      </div>
+      
+      <div class="card-actions" onclick="event.stopPropagation()">
+        <button class="card-btn edit" onclick="openEditModal(&#39;seed_1&#39;)">✏ Edit</button>
+        <button class="card-btn delete" onclick="askDelete(&#39;seed_1&#39;)">🗑 Delete</button>
+      </div>
+    </div>
+    <div class="recipe-card" onclick="viewRecipe(&#39;seed_2&#39;)">
+      <div class="card-img-placeholder">🍱</div>
+      <div class="card-tag">Lunch</div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-time">⏱ 45 min</span>
+          <span class="card-diff easy">easy</span>
+        </div>
+        <div class="card-title">Hibachi Chicken &amp; Fried Rice</div>
+        <div class="card-desc">Golden hibachi chicken with garlicky fried rice and homemade yum yum sauce. Better than the restaurant.</div>
+      </div>
+      
+      <div class="card-actions" onclick="event.stopPropagation()">
+        <button class="card-btn edit" onclick="openEditModal(&#39;seed_2&#39;)">✏ Edit</button>
+        <button class="card-btn delete" onclick="askDelete(&#39;seed_2&#39;)">🗑 Delete</button>
+      </div>
+    </div></div>
+</main>
+
+<footer>
+  <p>kamcookz &nbsp;·&nbsp; <span>Study</span> · <span style="color:var(--red)">Cook</span> · <span style="color:var(--green)">Train</span> &nbsp;∞</p>
+</footer>
+
+<!-- FORM MODAL -->
+<div class="modal-overlay" id="form-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-form-title">Add New Recipe</h2>
+      <button class="modal-close" onclick="closeFormModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id">
+      <div class="form-row">
+        <div class="form-group"><label>Recipe Name *</label><input type="text" id="f-name" placeholder="e.g. Shakshuka"></div>
+        <div class="form-group"><label>Category</label>
+          <select id="f-category"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option><option>Dessert</option><option>Drink</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Cook Time</label><input type="text" id="f-time" placeholder="e.g. 30 min"></div>
+        <div class="form-group"><label>Difficulty</label>
+          <select id="f-difficulty"><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select></div>
+      </div>
+      <div class="form-group"><label>Short Description</label><textarea id="f-desc" placeholder="What makes this special?"></textarea></div>
+      <div class="form-group"><label>Emoji / Image URL (optional)</label><input type="text" id="f-image" placeholder="🍳  or  https://…"></div>
+      <div class="form-group">
+        <label>Ingredients</label>
+        <div class="ingredients-list" id="ingredients-list"></div>
+        <button class="btn-add-ingredient" onclick="addIngredientField()">+ Add Ingredient</button>
+      </div>
+      <div class="form-group">
+        <label>Steps / Instructions</label>
+        <div class="ingredients-list" id="steps-list"></div>
+        <button class="btn-add-ingredient" onclick="addStepField()">+ Add Step</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeFormModal()">Cancel</button>
+      <button class="btn-save" id="btn-save-recipe" onclick="saveRecipe()">Save Recipe</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW MODAL -->
+<div class="modal-overlay" id="view-modal">
+  <div class="modal"><div id="view-modal-content"></div></div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3>Delete Recipe?</h3>
+    <p>This can't be undone.</p>
+    <div class="confirm-btns">
+      <button class="confirm-no" onclick="closeConfirm()">Keep It</button>
+      <button class="confirm-yes" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #app -->
+<div class="toast" id="toast"></div>
+
+<!-- ══ FIREBASE ══ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getDatabase, ref, set, push, remove, onValue, get } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+// ── CONFIG ──
+const firebaseConfig = {
+  apiKey: "AIzaSyBHX6HceUiS5BY3zaUDO6bGgFjSZvKhgwM",
+  authDomain: "kamcookz.firebaseapp.com",
+  databaseURL: "https://kamcookz-default-rtdb.firebaseio.com",
+  projectId: "kamcookz",
+  storageBucket: "kamcookz.firebasestorage.app",
+  messagingSenderId: "754666696710",
+  appId: "1:754666696710:web:0d4e782b8d056d7c299387"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getDatabase(firebaseApp);
+const recipesRef = ref(db, "recipes");
+
+// ── SEED DATA (written to Firebase once if empty) ──
+const SEED = [
+  {
+    id:"seed_1", name:"Butter Chicken", category:"Lunch", time:"60–90 min", difficulty:"medium",
+    description:"Tender marinated chicken in a rich, creamy tomato-cashew sauce. Worth every minute.",
+    image:"🍛",
+    ingredients:[
+      "Chicken breast","3 tbsp yogurt","2 tbsp lemon juice","1 tbsp garlic","1 tbsp ginger",
+      "1 tsp black pepper","1 tbsp masala (or curry)","1 tsp salt","1 tbsp paprika",
+      "— Sauce —","Butter","1 onion + garlic + ginger","4 tomatoes","Handful of cashews",
+      "1 tbsp vinegar","1 tsp sugar","1 cup boiling water","½ cup cream"
+    ],
+    steps:[
+      "Mix chicken with yogurt, lemon juice, garlic, ginger, black pepper, masala, salt, and paprika. Marinate at least 20 minutes — overnight is best.",
+      "Cook marinated chicken on the stove over medium heat until fully cooked and the sauce dries up. Set aside.",
+      "In the same pan, melt butter and sauté onion, garlic, and ginger until soft.",
+      "Add tomatoes, cashews, boiling water, vinegar, and sugar. Cook together for ~15 minutes.",
+      "Blend the sauce until smooth, then return to heat.",
+      "Add a knob of butter, the cooked chicken, and ½ cup cream. Simmer 5 minutes and serve hot."
+    ],
+    createdAt: "2025-01-01T00:00:00.000Z"
+  },
+  {
+    id:"seed_2", name:"Hibachi Chicken & Fried Rice", category:"Lunch", time:"45 min", difficulty:"easy",
+    description:"Golden hibachi chicken with garlicky fried rice and homemade yum yum sauce. Better than the restaurant.",
+    image:"🍱",
+    ingredients:[
+      "— Hibachi Sauce —","1½ tbsp teriyaki sauce","1 tbsp soy sauce",
+      "¼ tsp onion powder","¼ tsp garlic powder","Sesame seeds (optional)",
+      "— Chicken —","Chicken breasts, cubed","Light olive oil",
+      "— Fried Rice —","Olive oil","¼ white onion, diced","3 garlic cloves, minced",
+      "Butter (optional)","1–2 cups mixed vegetables","1 egg",
+      "1–2 cups cooked white rice","2 tbsp soy sauce",
+      "— Yum Yum Sauce —","3 tbsp mayo",
+      "1 tsp rice vinegar (or vinegar + pinch of sugar)","1 tsp teriyaki sauce",
+      "1 tsp sriracha (or honey chili flakes)","2 tsp sugar",
+      "¼ tsp onion powder","¼ tsp garlic powder"
+    ],
+    steps:[
+      "Mix all hibachi sauce ingredients in a bowl.",
+      "Cube the chicken breasts and coat in the hibachi sauce.",
+      "Cook chicken in light olive oil on medium-high heat until golden brown. Remove and set aside.",
+      "Heat cast iron pan with olive oil on medium. Sauté diced onion until translucent.",
+      "Add minced garlic (+ optional butter), stir 1 minute.",
+      "Add mixed vegetables and stir until coated.",
+      "Push everything to the side, make a hole in the center, scramble 1 egg.",
+      "Add cooked rice and soy sauce. Combine everything together.",
+      "Mix all yum yum sauce ingredients. Plate rice, top with chicken, drizzle yum yum sauce."
+    ],
+    createdAt: "2025-01-02T00:00:00.000Z"
+  }
+];
+
+// ── STATE ──
+const ADMIN_PASSWORD = "kamcookz0408";
+const EMOJIS = {Breakfast:"🍳",Lunch:"🥗",Dinner:"🍽️",Snack:"🥜",Dessert:"🍰",Drink:"🥤"};
+let currentRole = null;
+let currentFilter = "all";
+let currentSearch = "";
+let deleteTargetId = null;
+let editId = null;
+let allRecipes = []; // live cache from Firebase
+
+// ── SEED FIREBASE IF EMPTY ──
+async function seedIfEmpty() {
+  const snap = await get(recipesRef);
+  if (!snap.exists()) {
+    for (const recipe of SEED) {
+      await set(ref(db, "recipes/" + recipe.id), recipe);
+    }
+  }
+}
+
+// ── REAL-TIME LISTENER ──
+function startListening() {
+  onValue(recipesRef, (snap) => {
+    const data = snap.val();
+    if (data) {
+      allRecipes = Object.values(data).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+    } else {
+      allRecipes = [];
+    }
+    renderGrid(getFiltered());
+    updateStats();
+  });
+}
+
+// ── INIT ──
+async function init() {
+  await seedIfEmpty();
+  startListening();
+  // Hide loading, show login
+  setTimeout(() => {
+    document.getElementById("loading-splash").classList.add("hidden");
+    document.getElementById("login-screen").classList.remove("hidden");
+  }, 1400);
+}
+
+init();
+
+// ── LOGIN ──
+window.switchTab = function(tab, btn) {
+  document.querySelectorAll(".login-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("tab-admin").style.display = tab === "admin" ? "flex" : "none";
+  document.getElementById("tab-guest").style.display  = tab === "guest"  ? "flex" : "none";
+  document.getElementById("pw-error").textContent = "";
+};
+
+window.adminLogin = function() {
+  const pw = document.getElementById("pw-input").value;
+  if (pw === ADMIN_PASSWORD) {
+    enterApp("admin");
+  } else {
+    const err = document.getElementById("pw-error");
+    err.textContent = "Wrong password. Try again.";
+    document.getElementById("pw-input").value = "";
+    document.getElementById("pw-input").focus();
+    setTimeout(() => err.textContent = "", 3000);
+  }
+};
+
+window.enterApp = function(role) {
+  currentRole = role;
+  document.getElementById("login-screen").classList.add("hidden");
+  document.getElementById("app").style.display = "block";
+  const isAdmin = role === "admin";
+  document.getElementById("btn-new-recipe").style.display = isAdmin ? "block" : "none";
+  const badge = document.getElementById("role-badge");
+  badge.textContent = isAdmin ? "Admin" : "Guest";
+  badge.className = isAdmin ? "admin-badge" : "guest-badge";
+  renderGrid(getFiltered());
+  updateStats();
+};
+
+window.logout = function() {
+  currentRole = null;
+  document.getElementById("login-screen").classList.remove("hidden");
+  document.getElementById("app").style.display = "none";
+  document.getElementById("pw-input").value = "";
+  document.getElementById("pw-error").textContent = "";
+  currentFilter = "all";
+  currentSearch = "";
+  document.querySelectorAll(".filter-btn").forEach((b,i) => b.classList.toggle("active", i===0));
+  document.getElementById("tab-admin").style.display = "flex";
+  document.getElementById("tab-guest").style.display = "none";
+  document.querySelectorAll(".login-tab").forEach((t,i) => t.classList.toggle("active", i===0));
+};
+
+// ── HELPERS ──
+function showToast(msg, err=false) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (err ? " error" : "");
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+
+function updateStats() {
+  document.getElementById("stat-total").textContent = allRecipes.length;
+  document.getElementById("stat-categories").textContent = [...new Set(allRecipes.map(r=>r.category))].length;
+  document.getElementById("stat-latest").textContent = allRecipes.length ? allRecipes[allRecipes.length-1].name.split(" ")[0] : "—";
+}
+
+function cardImg(r) {
+  const isEmoji = r.image && [...r.image].length <= 2;
+  const isUrl   = r.image && r.image.startsWith("http");
+  if (isUrl) return `<img class="card-img" src="${r.image}" alt="${r.name}" onerror="this.outerHTML='<div class=card-img-placeholder>${EMOJIS[r.category]||"🍴"}</div>'">`;
+  return `<div class="card-img-placeholder">${r.image && isEmoji ? r.image : (EMOJIS[r.category]||"🍴")}</div>`;
+}
+
+function renderGrid(list) {
+  const grid = document.getElementById("recipe-grid");
+  document.getElementById("shown-count").textContent = list.length + " recipe" + (list.length!==1?"s":"");
+  const isAdmin = currentRole === "admin";
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">👨‍🍳</div><h3>${allRecipes.length ? "No matching recipes" : "No recipes yet!"}</h3><p>${allRecipes.length ? "Try a different filter." : "Add your first recipe above."}</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(r => `
+    <div class="recipe-card" onclick="viewRecipe('${r.id}')">
+      ${cardImg(r)}
+      <div class="card-tag">${r.category}</div>
+      <div class="card-body">
+        <div class="card-meta">
+          ${r.time ? `<span class="card-time">⏱ ${r.time}</span>` : ""}
+          <span class="card-diff ${r.difficulty}">${r.difficulty}</span>
+        </div>
+        <div class="card-title">${r.name}</div>
+        ${r.description ? `<div class="card-desc">${r.description}</div>` : ""}
+      </div>
+      ${isAdmin ? `
+      <div class="card-actions" onclick="event.stopPropagation()">
+        <button class="card-btn edit" onclick="openEditModal('${r.id}')">✏ Edit</button>
+        <button class="card-btn delete" onclick="askDelete('${r.id}')">🗑 Delete</button>
+      </div>` : ""}
+    </div>`).join("");
+}
+
+function getFiltered() {
+  return allRecipes.filter(r => {
+    const mc = currentFilter === "all" || r.category === currentFilter;
+    const ms = !currentSearch || r.name.toLowerCase().includes(currentSearch.toLowerCase()) || (r.description||"").toLowerCase().includes(currentSearch.toLowerCase());
+    return mc && ms;
+  });
+}
+
+window.filterRecipes = function(cat, btn) {
+  currentFilter = cat;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderGrid(getFiltered());
+};
+
+window.searchRecipes = function(val) { currentSearch = val; renderGrid(getFiltered()); };
+
+// ── ADD / EDIT MODAL ──
+window.openAddModal = function() {
+  if (currentRole !== "admin") return;
+  editId = null;
+  document.getElementById("modal-form-title").textContent = "Add New Recipe";
+  ["edit-id","f-name","f-time","f-desc","f-image"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("f-category").value = "Breakfast";
+  document.getElementById("f-difficulty").value = "easy";
+  document.getElementById("ingredients-list").innerHTML = "";
+  document.getElementById("steps-list").innerHTML = "";
+  addIngredientField(); addIngredientField(); addStepField();
+  document.getElementById("form-modal").classList.add("open");
+};
+
+window.openEditModal = function(id) {
+  if (currentRole !== "admin") return;
+  const r = allRecipes.find(x => x.id === id); if (!r) return;
+  editId = id;
+  document.getElementById("modal-form-title").textContent = "Edit Recipe";
+  document.getElementById("f-name").value = r.name;
+  document.getElementById("f-category").value = r.category;
+  document.getElementById("f-time").value = r.time || "";
+  document.getElementById("f-difficulty").value = r.difficulty || "easy";
+  document.getElementById("f-desc").value = r.description || "";
+  document.getElementById("f-image").value = r.image || "";
+  document.getElementById("ingredients-list").innerHTML = "";
+  document.getElementById("steps-list").innerHTML = "";
+  (r.ingredients||[]).forEach(v => addIngredientField(v));
+  (r.steps||[]).forEach(v => addStepField(v));
+  if (!(r.ingredients||[]).length) addIngredientField();
+  if (!(r.steps||[]).length) addStepField();
+  document.getElementById("form-modal").classList.add("open");
+};
+
+window.closeFormModal = function() { document.getElementById("form-modal").classList.remove("open"); };
+
+window.addIngredientField = function(val="") {
+  const list = document.getElementById("ingredients-list");
+  const row = document.createElement("div"); row.className = "ingredient-row";
+  row.innerHTML = `<input type="text" placeholder="e.g. 2 eggs" value="${val.replace(/"/g,"&quot;")}"><button onclick="this.parentElement.remove()">×</button>`;
+  list.appendChild(row);
+};
+
+function addIngredientField(val="") { window.addIngredientField(val); }
+
+window.addStepField = function(val="") {
+  const list = document.getElementById("steps-list");
+  const row = document.createElement("div"); row.className = "ingredient-row";
+  row.innerHTML = `<input type="text" placeholder="Step ${list.children.length+1}…" value="${val.replace(/"/g,"&quot;")}"><button onclick="this.parentElement.remove()">×</button>`;
+  list.appendChild(row);
+};
+
+function addStepField(val="") { window.addStepField(val); }
+
+window.saveRecipe = async function() {
+  if (currentRole !== "admin") return;
+  const name = document.getElementById("f-name").value.trim();
+  if (!name) { showToast("Recipe name is required!", true); return; }
+
+  const btn = document.getElementById("btn-save-recipe");
+  btn.disabled = true; btn.textContent = "Saving…";
+
+  const ingredients = [...document.querySelectorAll("#ingredients-list input")].map(i=>i.value.trim()).filter(Boolean);
+  const steps       = [...document.querySelectorAll("#steps-list input")].map(i=>i.value.trim()).filter(Boolean);
+  const existing    = editId ? allRecipes.find(r=>r.id===editId) : null;
+
+  const data = {
+    id: editId || ("r_" + Date.now()),
+    name,
+    category: document.getElementById("f-category").value,
+    time:     document.getElementById("f-time").value.trim(),
+    difficulty: document.getElementById("f-difficulty").value,
+    description: document.getElementById("f-desc").value.trim(),
+    image:    document.getElementById("f-image").value.trim(),
+    ingredients, steps,
+    createdAt: existing ? existing.createdAt : new Date().toISOString()
+  };
+
+  try {
+    await set(ref(db, "recipes/" + data.id), data);
+    showToast(editId ? "Recipe updated ✓" : "Recipe added ✓");
+    closeFormModal();
+  } catch(e) {
+    showToast("Error saving. Check connection.", true);
+  }
+
+  btn.disabled = false; btn.textContent = "Save Recipe";
+};
+
+// ── VIEW MODAL ──
+window.viewRecipe = function(id) {
+  const r = allRecipes.find(x => x.id === id); if (!r) return;
+  const isAdmin = currentRole === "admin";
+  const isEmoji = r.image && [...r.image].length <= 2;
+  const isUrl   = r.image && r.image.startsWith("http");
+  const img = isUrl
+    ? `<img class="view-modal-img" src="${r.image}" alt="${r.name}" onerror="this.outerHTML='<div class=view-modal-img-placeholder>${EMOJIS[r.category]||"🍴"}</div>'">`
+    : `<div class="view-modal-img-placeholder">${r.image && isEmoji ? r.image : (EMOJIS[r.category]||"🍴")}</div>`;
+  const ings = (r.ingredients||[]).length ? `<p class="view-section-title">Ingredients</p><ul class="ingredients-view">${r.ingredients.map(i=>`<li>${i}</li>`).join("")}</ul>` : "";
+  const stps = (r.steps||[]).length ? `<p class="view-section-title">Method</p><ol class="steps-view">${r.steps.map(s=>`<li>${s}</li>`).join("")}</ol>` : "";
+
+  document.getElementById("view-modal-content").innerHTML = `
+    <div class="modal-header">
+      <h2 class="modal-title">${r.name}</h2>
+      <button class="modal-close" onclick="document.getElementById('view-modal').classList.remove('open')">✕</button>
+    </div>${img}
+    <div class="view-modal-body">
+      <div class="view-modal-meta">
+        <div class="view-meta-item"><span class="view-meta-label">Category</span><span class="view-meta-val">${r.category}</span></div>
+        ${r.time ? `<div class="view-meta-item"><span class="view-meta-label">Time</span><span class="view-meta-val">${r.time}</span></div>` : ""}
+        <div class="view-meta-item"><span class="view-meta-label">Difficulty</span><span class="view-meta-val" style="color:var(--${r.difficulty==="easy"?"green":r.difficulty==="hard"?"red":"black"})">${r.difficulty}</span></div>
+      </div>
+      ${r.description ? `<p style="font-size:0.9rem;color:var(--warm-gray);line-height:1.7;margin-bottom:0.5rem">${r.description}</p>` : ""}
+      ${ings}${stps}
+      ${isAdmin ? `<div style="margin-top:1.5rem"><button class="btn-save" style="max-width:180px" onclick="document.getElementById('view-modal').classList.remove('open');openEditModal('${r.id}')">✏ Edit Recipe</button></div>` : ""}
+    </div>`;
+  document.getElementById("view-modal").classList.add("open");
+};
+
+// ── DELETE ──
+window.askDelete = function(id) {
+  if (currentRole !== "admin") return;
+  deleteTargetId = id;
+  document.getElementById("confirm-overlay").classList.add("open");
+};
+window.closeConfirm = function() { deleteTargetId = null; document.getElementById("confirm-overlay").classList.remove("open"); };
+window.confirmDelete = async function() {
+  try {
+    await remove(ref(db, "recipes/" + deleteTargetId));
+    showToast("Recipe deleted");
+  } catch(e) {
+    showToast("Error deleting. Try again.", true);
+  }
+  closeConfirm();
+};
+
+// ── BACKDROP CLOSES ──
+document.getElementById("form-modal").addEventListener("click", e => { if(e.target===e.currentTarget) closeFormModal(); });
+document.getElementById("view-modal").addEventListener("click", e => { if(e.target===e.currentTarget) document.getElementById("view-modal").classList.remove("open"); });
+document.getElementById("confirm-overlay").addEventListener("click", e => { if(e.target===e.currentTarget) closeConfirm(); });
+
+</script>
+
+
+</body></html>
